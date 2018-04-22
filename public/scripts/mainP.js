@@ -1,137 +1,14 @@
-/*var pageNum = getUrlParameter('page');
-console.log(pageNum);*/
-function getAjax(){
-  var pageNum = getUrlParameter('page');
-  $.ajax({
-    dataType: "json",
-    url: `http://140.114.79.72/video/ajax?page=${pageNum}`,
-    success: function(data){
-    //  var json = $.parseJSON(data);
-    var obj = data.data;
-    createVideoIndex(obj);
-    addLike(obj);
-  //  createPagination(data.last_page);
-    searchLine(obj);
-  }
-  });
-}
-//pageNum : current video pages
-var pageNum = 1;
-var prev = 0;
-function loadingMore(){
-  $(window).scroll(function(){
-      //last : 距離最下方剩餘可以滑動的距離
-      last=$("body").height()-$(window).height()-500;
-      if($(window).scrollTop()>=last && prev != last){
-      prev = last;
-      pageNum++;
-      console.log(pageNum);
-      $.ajax({
-        dataType: "json",
-        url: `http://140.114.79.72/video/ajax?page=${pageNum}`,
-        success: function(data){
-        //  var json = $.parseJSON(data);
-        var obj = data.data;
-        createVideoIndex(obj);
-        addLike(obj);
-      }
-      });
-      }
-  })
 
-}
-function createPagination(last_page){
-  var pageNum = getUrlParameter('page');
-  if(pageNum == null) pageNum = 1;
-  else pageNum = pageNum-'0';
-  var pagination = document.querySelector(".pagination");
-
-  //prev 5 Page
-  for(var i = 1 ; i <= 5 && pageNum-i >= 1 ; i++){
-    var paginationItem = document.createElement('li');
-    pagination.insertBefore(paginationItem, pagination.childNodes[0]);
-    var paginationItemLink = document.createElement('a');
-    paginationItemLink.innerHTML = pageNum-i;
-    paginationItem.insertBefore(paginationItemLink, paginationItem.childNodes[0]);
-    paginationItemLink.href = `./index.html?page=${pageNum-i}`;
-  }
-  //currentPage
-  var paginationItem = document.createElement('li');
-  pagination.insertBefore(paginationItem, null);
-  var paginationItemLink = document.createElement('a');
-  paginationItemLink.innerHTML = pageNum;
-  paginationItem.insertBefore(paginationItemLink, paginationItem.childNodes[0]);
-  paginationItem.className = "active";
-  //paginationItemLink.href = `./index.html?page=${pageNum}`;
-  //nextPage
-  for(var i = 1 ; i <= 5 && i+pageNum <= last_page; i++){
-    var paginationItem = document.createElement('li');
-    pagination.insertBefore(paginationItem, null);
-    var paginationItemLink = document.createElement('a');
-    paginationItemLink.innerHTML = i+pageNum;
-    paginationItem.insertBefore(paginationItemLink, paginationItem.childNodes[0]);
-    paginationItemLink.href = `./index.html?page=${i+pageNum}`;
-  }
-  //pre page
-  if(pageNum != 1){
-    var paginationItem = document.createElement('li');
-    pagination.insertBefore(paginationItem, pagination.childNodes[0]);
-    var paginationItemLink = document.createElement('a');
-    paginationItemLink.innerHTML = "上一頁";
-    paginationItem.insertBefore(paginationItemLink, paginationItem.childNodes[0]);
-    paginationItemLink.href = `./index.html?page=${pageNum-1}`;
-  }
-  //first page
-  var paginationItem = document.createElement('li');
-  pagination.insertBefore(paginationItem, pagination.childNodes[0]);
-  var paginationItemLink = document.createElement('a');
-  paginationItemLink.innerHTML = "第一頁";
-  paginationItem.insertBefore(paginationItemLink, paginationItem.childNodes[0]);
-  paginationItemLink.href = `./index.html?page=1`;
-  //next page
-  if(pageNum != last_page){
-    var paginationItem = document.createElement('li');
-    pagination.insertBefore(paginationItem, null);
-    var paginationItemLink = document.createElement('a');
-    paginationItemLink.innerHTML = "下一頁";
-    paginationItemLink.className = "nextLink";
-    paginationItem.insertBefore(paginationItemLink, paginationItem.childNodes[0]);
-    paginationItemLink.href = `./index.html?page=${pageNum+1}`;
-  }
-  //last page
-  var paginationItem = document.createElement('li');
-  pagination.insertBefore(paginationItem, null);
-  var paginationItemLink = document.createElement('a');
-  paginationItemLink.innerHTML = "最末頁";
-  paginationItem.insertBefore(paginationItemLink, paginationItem.childNodes[0]);
-  paginationItemLink.href = `./index.html?page=${last_page}`;
-
-}
-function getUrlParameter(sParam) {
-    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
-        sURLVariables = sPageURL.split('&'),
-        sParameterName,
-        i;
-
-    for (i = 0; i < sURLVariables.length; i++) {
-        sParameterName = sURLVariables[i].split('=');
-
-        if (sParameterName[0] === sParam) {
-            return sParameterName[1] === undefined ? true : sParameterName[1];
-        }
-    }
-};
-//create videos
 function createVideoIndex(obj) {
   var row = document.querySelector(".videospan");
   var url=window.location.href;
   console.log(url);
-  for(var i=0;i<obj.length;i++){
+  for(var i=obj.length-1;i>=0;i--){
     var tag = document.createElement('div');
     var id = 'id' + i;
     tag.id = id;
     tag.className = `col col-md-4 col-lg-3 frame`;
-    row.insertBefore(tag, null);
+    row.insertBefore(tag, row.childNodes[0]);
     var thumbnail = document.createElement('div');
     thumbnail.className = "thumbnail";
     tag.insertBefore(thumbnail, tag.childNodes[0]);
@@ -236,17 +113,7 @@ function createVideoIndex(obj) {
       button3.appendChild(buttontext3);
       thumbnailtag.insertBefore(button3, thumbnailtag.childNodes[0]);
     }
-  // //like
-  //   var like = document.createElement('a');
-  //   like.className = "btn btn-default btn-like";
-  //   var stringlike = "Like";
-  //   var liketext = document.createTextNode(stringlike);
-  //   like.appendChild(liketext);
-  //   caption.insertBefore(like, caption.childNodes[0]);
-
-  //   var likeicon = document.createElement('i');
-  //   likeicon.className = "far fa-heart";
-  //   like.insertBefore(likeicon, like.childNodes[0]);
+ 
 
   //title-link
     var textlink = document.createElement('a');
@@ -260,16 +127,7 @@ function createVideoIndex(obj) {
     title.appendChild(titletext);
     title.className = "title";
     textlink.insertBefore(title, textlink.childNodes[0]);
-  //title-tooltip
-  /*
-    var tooltip = document.createElement('p');
-    tooltip.className = "tooltips";
-    var stringtootip = obj[i].title;
-    var tootiptext = document.createTextNode(stringtootip);
-    tooltip.appendChild(tootiptext);
-    title.insertBefore(tooltip, title.childNodes[0]);
-  */
-  }
+}
 }
 function loadIndexBack(){
 //index-background-img
@@ -314,8 +172,8 @@ function loadSideBar(){
     sideimg.src = sidesrc.src;
     sidebar.insertBefore(sideimg, sidebar.childNodes[0]);
 }
-//create like button to press
 function addLike(obj){
+  /////////////like/////////////////////////
     for(var i=0;i<obj.length;i++){
       var selects = document.querySelector("#likeId"+i);
           selects.onclick=function (){
@@ -329,11 +187,8 @@ function addLike(obj){
         }
       }
 }
-window.onscroll = function(){
-
-}
-//create back to top button for scrolling to top
 function addScrollTop(){
+///////////////back_to_top/////////////////////////////////////////////
 
 
     var obtn = document.getElementById('back_to_top');
@@ -342,16 +197,14 @@ function addScrollTop(){
     var timer = null;
     var isTop = true;
     var clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
-
+   
     window.onscroll = function(){
-
-      //  addResize();
         // if(osTop>200){
         //   nav.style.backgroundColor ='black';
         // }
+       
         var osTop = document.documentElement.scrollTop || document.body.scrollTop;
         var width = document.body.clientWidth || document.documentElement.clientWidth;
-    //    console.log(osTop);
         if(width < 642){
           nav.style.backgroundColor ='black';
         }
@@ -360,7 +213,7 @@ function addScrollTop(){
         }else{
           nav.style.backgroundColor ='transparent';
         }
-        if (osTop >= clientHeight) {
+        if (osTop >= clientHeight-500) {
               // obtn.style.display = 'block';
               obtn.style.display = 'block';
               obtn.style.opacity = 1;
@@ -391,8 +244,7 @@ function addScrollTop(){
         },30);
     };
 }
-//create a search line for searching 
-function searchLine(obj){
+function searchLine(){
 
 var submit = document.querySelector(".index-input-btn");
 submit.addEventListener("click", function() {
@@ -412,22 +264,12 @@ submit.addEventListener("click", function() {
     }
 });
 }
-function addResize(){
-  window.onscroll = function(){
-    var width = document.body.clientWidth || document.documentElement.clientWidth;
-    console.log(width);
-  
-      loadingMore();
-  
-  }
-}
+
 //location.href = "./index.html?page=1";
 window.onload = function() {
-  getAjax();
-//  createPagination();
   loadIndexBack();
   loadSideBar();
   addScrollTop();
-  addResize();
-
+  searchLine();
+  
 }

@@ -16,5 +16,5 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-
+Route::get('/video', function() {return 'success';});
 Route::post('/video/upload', ['uses' => 'VideoController@uploadVideo']);

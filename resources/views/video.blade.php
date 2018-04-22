@@ -1,6 +1,6 @@
-<!DOCTYPE html>
-<html>
-  <head>
+<!doctype html>
+<html lang="{{ app()->getLocale() }}">
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>Hot Video</title>
@@ -15,7 +15,6 @@
     <link rel="stylesheet" type="text/css" href="styles/main.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Do Hyeon">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Gugi">
-
   </head>
   <body data-target="#navbar-spy" data-spy="scroll">
 
@@ -45,7 +44,7 @@
                       </ul>
                     </li>
                     <li class="part"><a href='#partII'>Channels</a></li>
-                    <li class="part"><a href='#partIII'>Listening & Speaking</a></li>
+                    <li class="part"><a href='#partIII'>Listenin & Speaking</a></li>
                     <li class="part-icon"><i class="fas fa-user"></i></li>
                     <li class="part-icon"><i class="fas fa-flag"></i></i></li>
                     <li class="part-icon"><i class="fas fa-envelope"></i></li>
@@ -74,30 +73,63 @@
     <div class = "row">
       <h1 class = "videopart">New Videos</h1>
       <div class = "col col-md-9">
-        <div class = "videospan"></div>
-        <ul class="pagination pagination-sm"></ul>
+        <div class = "videospan">
 
+            <?php foreach($videos as $video){
+            if($video->level=="Basic")
+                $level="<a class='btn btn-black btn-tag'>Basic</a>";
+            else if($video->level=="Intermediate")
+                $level="<a class='btn btn-primary btn-tag'>Intermediate</a>";
+            else
+                $level="<a class='btn btn-black btn-tag'>Advance</a>";
+            
+            if($video->test==1)
+                $test="<a class='btn btn-danger btn-tag'>測</a>";
+            else
+                 $test="";
+            
+            if($video->accent=='NULL')
+                $accent="";
+            else
+                $accent="<a class='btn btn-warning btn-tag'>{$video->accent}</a>";
+            echo "<div id='{$video->id}' class='col col-md-4 col-lg-3 frame'>
+                <div class='thumbnail'>
+                    <a href='./video?videoId={$video->videoId}'>
+                        <div class='photo'>
+                            <img src='http://img.youtube.com/vi/{$video->videoId}/0.jpg'>
+                            <span class='label photolabel label-inverse'>
+                                <span class='video-time'>{$video->time}</span>
+                            </span>
+                        </div>
+                    </a>
+                    <div class='caption'>
+                        <a href='./video?videoId={$video->videoId}' class='title'>
+                            <h3 class='title'>{$video->title}</h3>
+                        </a>
+                        <p>
+                            {$level}
+                            {$accent}
+                            {$test}
+                        </p>
+                    </div>
+                </div>
+            </div>";
+          }
+          echo "$videos" ;
+          ?>
+        </div>
+        
       </div>
-
       <div class = "col col-md-3 sidebar">
-        <!--img src="https://cdn.voicetube.com/assets/thumbnails/aEzMwNBjkAU.jpg" class = "side"></img-->
       </div>
-
     </div>
-
-
-
     <div class="back_to_top" id="back_to_top">
         <img src="./img/back_top_icon.png">
     </div>
-    <!-- <a href="javascript:;" id="btn" title="回到顶部"></a> -->
     <!--  footer -->
     <script src="videodata.json" type="text/javascript"></script>
-    <script src="./scripts/main.js"></script>
-
-    <script src="https://unpkg.com/infinite-scroll@3/dist/infinite-scroll.pkgd.min.js"></script>
-
-
+    <script>var videos = {!! $videos->toJson() !!};</script>
+    <script src="./scripts/mainP.js"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.10/js/all.js" integrity="sha384-slN8GvtUJGnv6ca26v8EzVaR9DC58QEwsIk9q1QXdCU8Yu8ck/tL/5szYlBbqmS+" crossorigin="anonymous"></script>
   </body>
 

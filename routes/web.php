@@ -18,11 +18,12 @@ Route::get('/', function () {
 });
 Route::post('/video/upload', ['uses' => 'VideoController@uploadVideo']);
 Route::get('/dev', function(){ return view('welcome');});
+Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/video', ['uses' => 'VideoController@getVideo']); 
+Route::get('/video/ajax', ['uses' => 'VideoController@getVideoData']); 
+Route::get('/video/subtitle', ['uses' => 'VideoController@getVideoSubtitle']);
+Route::get('/try/variable', ['uses' => 'VideoController@tryVariable']);
 
-//Auth::routes();
+Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-
-//Auth::routes();
-
-Route::get('/home1', 'HomeController@index1ewqe')->name('home');

@@ -1,23 +1,3 @@
-//var json2 = JSON.parse("http://140.114.79.72/video/subtitle?id=MRXv3taXkAg");
-//console.log(json2);
-var json;
-var videoId = getUrlParameter('id');
-$.ajax({
-  async: false,
-  url: `http://140.114.79.72/video/subtitle?id=${videoId}`,
-  type: "GET",
-  success: function(data){
-      json = JSON.parse(data[0].subtitles);
-    //  console.log(JSON.parse(json).json);
-      if(JSON.parse(json).json == "") alert("此部影片沒有字幕");
-      
-      json = JSON.parse(JSON.parse(json).json);
-      console.log(json);
-  }
-});
-
-
-
 
 var url=window.location.href;
 var engCaption=1;
@@ -48,18 +28,22 @@ $(window).click((event) => {
     if(!$(event.target).closest('.popup').length){
         $('.popuptext').remove();
         get_dict = false;
-    //    console.log(get_dict);
+        console.log(get_dict);
     }
 });
 
 function add_subtitude(){
-  //  json = JSON.parse(subtitle);
-    $.each(json, function(index, d){
+    json=JSON.parse(JSON.parse(videoPlays[0].subtitles));
+    if(json.json=="")
+        alert("此部影片沒有字幕");
+    json=JSON.parse(json.json);
+    console.log(json);
 
+    $.each(json, function(index, d){
         var text = '';
         id=0;
         d.text.split(' ').map((i)=>{
-          //  console.log(i);
+            console.log(i);
             text += `<span class='popup' id='text`+id+`' onclick='ask_google("`+i+'",'+index+','+id+`)')>` + i+ " </span>";
             id++;
         });
@@ -70,7 +54,7 @@ function add_subtitude(){
 
 function ask_google(word, index, id){
     get_dict = true;
-  //  console.log(get_dict, word);
+    console.log(get_dict, word);
     $.post("https://translation.googleapis.com/language/translate/v2?",
     {
         key: "AIzaSyAGjI6nBCUK1QAjqWxSuLFdWcv38pKENJ8",
@@ -78,7 +62,7 @@ function ask_google(word, index, id){
         target:"zh-TW"
     },(data, status) => {
         appending = '#subtitle' + index + ' #text' + id;
-    //    console.log(appending);
+        console.log(appending);
         $(appending).remove('#myPopup');
         $('.popuptext').remove();
         $(appending).append('<span class="popuptext" id="myPopup">'+data.data.translations[0].translatedText+'</span>');
@@ -87,7 +71,7 @@ function ask_google(word, index, id){
     });
 }
 
-function getUrlParameter(sParam) {
+var getUrlParameter = function getUrlParameter(sParam) {
     var sPageURL = decodeURIComponent(window.location.search.substring(1)),
         sURLVariables = sPageURL.split('&'),
         sParameterName,
@@ -103,14 +87,6 @@ function getUrlParameter(sParam) {
 };
 
 
-// load json file
-
-var tag = document.createElement('script');
-
-tag.src = "video1.json";
-var firstScriptTag = document.getElementsByTagName('script')[0];
-firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
 // 2. This code loads the IFrame Player API code asynchronously.
 var tag = document.createElement('script');
 
@@ -125,7 +101,7 @@ function onYouTubeIframeAPIReady() {
     player = new YT.Player('player', {
         height: '400',
         width: '100%',
-        videoId: getUrlParameter('id'),
+        videoId: getUrlParameter('videoId'),
         events: {
             'onReady': onPlayerReady,
             'onStateChange': onPlayerStateChange
@@ -149,18 +125,18 @@ var repeatFlag = false;
 var firstRepeat = true;
 var currentSubtitle = 0;
 function onPlayerStateChange(event) {
-  //  console.log(event.data);
+    console.log(event.data);
     if (event.data == YT.PlayerState.PLAYING && !done) {
 		doneTimeOut = setTimeout(function(){
 			player.pauseVideo();
 		}, duration);
         done = true;
-    //    console.log('stateChange and not done, duration = ' + duration);
+        console.log('stateChange and not done, duration = ' + duration);
     }else if (event.data == YT.PlayerState.PLAYING){
 		changeState = true;
 		renderSubtitle();
     }else if(event.data == YT.PlayerState.PAUSED && repeatFlag){
-    //    console.log('repeat')
+        console.log('repeat')
         repeat();
     }
 }
@@ -174,7 +150,7 @@ function playAt(index) {
 	if(typeof(doneTimeOut)!=='undefined')clearTimeout(doneTimeOut);
 	if(typeof(changeTimeOut)!=='undefined')clearTimeout(changeTimeOut);
     if(typeof(renderTimeOut)!=='undefined')clearTimeout(renderTimeOut);
-//    console.log('playAt render')
+    console.log('playAt render')
     //////////////////////
     
     $.post("https://translation.googleapis.com/language/translate/v2?",
@@ -200,21 +176,20 @@ function playAt(index) {
     });
 
     //////////////////////////////////////
-    // if(engCaption==1 && cnCaption==1)
-    //     $("#underSubtitles").html("<p id='underSubtitle'> " + json[0].transcripts[index].text +"<br/>" + cnCaptionCon+ "</p>");
+    
 	$(".list-group-item").each(function(){
         $(this).css("background-color", "white");
     });
 	$('#subtitle'+index).css("background-color", "#bfbfbf");
 	currentSubtitle = index;
 	second = parseInt(json[index].start_time)/1000;
-	d = json[index].end_time - json[index].start_time;
+	d = json[index].end_time-json[index].start_time;
 	duration = d-1;
     player.seekTo(second, 1);
 	done = false;
     player.playVideo();
-  //  console.log("playAt()");
-  //  console.log(second + " " + d);
+    console.log("playAt()");
+    console.log(second + " " + d);
 }
 
 function searchForSubtitle(){
@@ -336,4 +311,8 @@ function repeat(){
 function stopRepeat(){
     //player.pauseVideo();
     repeatFlag = false;
+}
+window.onload=function(){
+    console.log(videoPlays);
+    add_subtitude();
 }
