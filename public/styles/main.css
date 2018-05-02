@@ -216,6 +216,9 @@ li{
 .navbar-inverse .navbar-nav>li>a {
   color: snow !important;
 }
+.member-item{
+  padding: 10px 5px !important;
+}
 .open{
   background-color: transparent !important;
 }

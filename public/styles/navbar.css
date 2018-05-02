@@ -1,0 +1,78 @@
+body{
+  font-size: 16px;
+  padding: 0;
+  position: relative;
+}
+
+#hidden{
+  display: none;
+}
+
+.navbar{
+  height:100px;
+  line-height:50px;
+}
+
+.vMiddle{
+ margin-top: 12px;
+ font-size: 20px;
+}
+.navbar-brand{
+  font-size: 42px;
+  font-family: 'Do Hyeon', serif;
+  color: snow !important;
+}
+li{
+  font-family: 'Gugi', serif;
+
+}
+.navbar-right{
+  padding-top: 13px;
+}
+.navbar{
+  background:black;
+  box-shadow: 0 0px 0px rgba(0,0,0,0) !important;
+
+}
+.part{
+  background:rgba(0,0,0,0.7);
+  box-shadow: 0 0px 0px rgba(0,0,0,0) !important;
+}
+.navbar-inverse .navbar-nav>li>a {
+  color: snow !important;
+}
+.member-item{
+  padding: 10px 5px !important;
+}
+
+
+
+.part-icon{
+  display: none;
+  visibility: hidden;
+}
+@media only screen and (min-width: 762px) {
+  .part-icon{
+    visibility:visible;
+    color: white;
+    margin: 1px 10px;
+  }
+  .part{
+    background:transparent;
+  }
+}
+
+.navbar-collapse{
+  border-color: transparent !important;
+}
+.dropdown-menu{
+  padding: 0;
+}
+.icon-bar{
+  background-color: white !important;
+}
+nav{
+    display: block;
+    margin: 0 0 70px 0;
+}
+

@@ -1,0 +1,89 @@
+<?php
+
+namespace App\Http\Controllers;
+use DB;
+use App\User;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Auth;
+use Symfony\Component\Process\Process;
+
+class VideoController extends Controller
+{
+    public function uploadVideo(Request $request)
+    {
+		$videoId = $request['videoId'];
+		$accent = $request['accent'];
+		$title = $request['title'];
+		$time = $request['time'];
+		$test = $request['test'];
+		$level = $request['level'];
+		$success = DB::table('video')->insert([
+			['videoId' => $videoId, 'accent' => $accent, 'title' => $title, 'time' => $time, 'test' => $test, 'level' => $level]
+		]);
+		if($success) return 'success';
+		else return 'fail';
+    }
+    public function getVideo(Request $request)
+	{
+		$videoId = $request['videoId'];
+		$videos = DB::table('video')->paginate(15);
+		if($videoId!=""){
+			$videoPlays = DB::table('subtitle')->where('videoId',$videoId)->get();
+			return view('videoPlay', ['videoPlays' => $videoPlays]);
+		}
+		return view('video', ['videos' => $videos]); 
+	}
+     public function getVideoData(Request $request)
+	{
+		$id = $request['videoId'];
+		$videos = DB::table('video')->paginate(15);
+		$videos = json_encode($videos);
+		return $videos; 
+	}
+	public function getVideoSubtitle(Request $request)
+	{
+		$id = $request['id'];
+		$videos = DB::table('subtitle')->where('videoId','=',$id)->get();
+		return $videos; 
+	}
+	public function tryVariable(Request $request)
+	{
+		$subtitles = DB::table('subtitle')->select('subtitles')->where('id','19')->get();
+		return view('tryVariable', ['subtitles' => $subtitles]);
+	}
+	
+	public function insertVideo(Request $request)
+	{
+		$user = Auth::user();
+		$v= $request['v'];
+		return dirname($v);
+		if(dirname($v) == "https://youtu.be") return "dasfds";// return $videoId = mb_substr($basename($v).PHP_EOL,11); 
+		else if(dirname($v).PHP_EOL == "https://www.youtube.com"){
+			$query_str = parse_url($v, PHP_URL_QUERY);
+			parse_str($query_str, $query_params);
+			return $videoId = array_key_exists("v", $query_params) ? $query_params['v'] : substr($videoId, -11);
+		}
+		else return $videoId = $v;
+		//$process = new Process('python /home/chao/web/subtitle.py');
+		$duplicate = DB::table('userVideoList')->where('userId', $user['id'])->where('videoId', $videoId)->count();
+		if($duplicate) return redirect('/video?videoId='.$videoId);
+		$success = DB::table('userVideoList')->insert([
+			['userId' => $user['id'], 'videoId' => $videoId, "created_at" =>  \Carbon\Carbon::now('Asia/Taipei')]
+		]);
+		if($success) return redirect('/video?videoId='.$videoId);
+	}
+
+	public function getUserVideoList(Request $request)
+	{
+		$user = Auth::user();
+		$list = DB::table('userVideoList')->where('userId', $user['id'])->get();
+		$list = json_encode($list);
+		return $list;
+	}
+
+	public function getInsertVideo(Request $request)
+	{
+		return view('insertVideo');
+	}
+}

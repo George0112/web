@@ -1,0 +1,17 @@
+.insertbody{
+  margin-top: 70px;
+  height: 100vh;
+  background-color: #666666;
+}
+.container{
+  background-color: white;
+}
+.card-header{
+  font-size: 25px;
+}
+.row{
+  padding: 20px;
+}
+.space{
+  height: 200px;
+}

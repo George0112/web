@@ -1,8 +1,11 @@
-@extends('layouts.app')
+@extends('layouts.navbar')
 
+@section('style')
+    <link rel="stylesheet" type="text/css" href="styles/login.css">
+@endsection
 @section('content')
 <div class="container">
-    <div class="row justify-content-center">
+    <div class="row justify-content-center login-border">
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">{{ __('Login') }}</div>

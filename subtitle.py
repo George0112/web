@@ -4,6 +4,7 @@
 import MySQLdb
 import requests
 import json
+import sys
 # ?��??�据库�???
 db = MySQLdb.connect("localhost", "root", "123456", "web")
 
@@ -11,10 +12,11 @@ db = MySQLdb.connect("localhost", "root", "123456", "web")
 cursor = db.cursor()
 
 # 使用execute?��??��?SQL语句
-cursor.execute("SELECT videoId FROM video;")
+#cursor.execute("SELECT videoId FROM video;")
 
 # 使用 fetchone() ?��??��?一?�数??
-videos = cursor.fetchall()
+#videos = cursor.fetchall()
+vid = argv[1]
 for video in videos:
     print "videoId: %s " % video
     v = "https://www.youtube.com/watch?v=" + str(video[0])

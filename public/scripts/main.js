@@ -186,7 +186,7 @@ function createVideoIndex(obj) {
   /////////////like//////////////////////////
   //img-link
     var imglink = document.createElement('a');
-    imglink.href = `./video.html?id=${obj[i].videoId}&index=${i+1}`;
+    imglink.href = `./videoPage?id=${obj[i].videoId}&index=${i+1}`;
     thumbnail.insertBefore(imglink, thumbnail.childNodes[0]);
 
   //img
@@ -250,7 +250,7 @@ function createVideoIndex(obj) {
 
   //title-link
     var textlink = document.createElement('a');
-    textlink.href = `./video.html?id=${obj[i].videoId}&index=${i+1}`;
+    textlink.href = `./videoPage?id=${obj[i].videoId}&index=${i+1}`;
     textlink.className = "title";
     caption.insertBefore(textlink, caption.childNodes[0]);
   //title

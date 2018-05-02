@@ -45,8 +45,8 @@
                     </li>
                     <li class="part"><a href='#partII'>Channels</a></li>
                     <li class="part"><a href='#partIII'>Listenin & Speaking</a></li>
-                    <li class="part-icon"><i class="fas fa-user"></i></li>
-                    <li class="part-icon"><i class="fas fa-flag"></i></i></li>
+                    <li class="part-icon"><a href='/videoList'><i class="fas fa-user"></a></i></li>
+                    <li class="part-icon"><a href='/insertVideo'><i class="fas fa-flag"></a></i></i></li>
                     <li class="part-icon"><i class="fas fa-envelope"></i></li>
                     <li class="part-icon">  <i class="fas fa-check-square"></i></li>
 
