@@ -15,6 +15,15 @@
     <link rel="stylesheet" type="text/css" href="styles/navbar.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Do Hyeon">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Gugi">
+<!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=GA_TRACKING_ID"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-43764481-1');
+</script>
     @yield('style')
   </head>
   <body data-target="#navbar-spy" data-spy="scroll">

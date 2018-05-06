@@ -35,13 +35,24 @@
         </div>
       </div>
       <div class='row'>
-        <div class='col col-md-12 col-lg-12 col-sm-12' id='my-fb-comments'>
+        <div class='col col-md-6 col-lg-6 col-sm-6' id='my-fb-comments'>
           <div class="fb-comments"
             data-href="http://140.114.79.72"
             data-numposts="10"
             data-width="100%"
             data-colorscheme="light">
           </div>
+        </div>
+        <div class='col col-md-6 col-lg-6 col-sm-6 scroll-list'>
+          <?php
+          foreach ($list as $l){
+            $url = 'http://img.youtube.com/vi/'.$l->videoId.'/3.jpg';
+            echo '<div class="video-list"><a href="./videoPage?id='.$l->videoId.'">
+            <img src='.$url.' >
+            <span class="listtitle">'.$l->title.'</span>
+          </a>
+          </div>';}
+          ?>
         </div>
       </div>
     </div>

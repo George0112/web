@@ -1,6 +1,8 @@
 body{
   font-size: 16px;
   padding: 0;
+  height:100%;
+  margin:0;
 }
 .toppage{
   height:640px;
@@ -306,4 +308,26 @@ body{
   border-width: 10px;
   width:480px;
   border-color: rgb(192,192,192,0.8);
+}
+.bg404{
+  position: relative;
+  background-color:rgb(192,57,43);
+  height:700px;
+  width: 100%;
+  text-align:center
+}
+.pic404{
+  min-height: 90%;
+  height:100%;
+  width: 100%;
+}
+.container-fluid{
+  
+}
+.notice{
+  /* right: 400px; */
+  /* padding: 3% auto 3% auto; */
+  padding-top: 7%;
+  /* padding-bottom: 3%; */
+  margin-left:28%;
 }

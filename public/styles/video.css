@@ -221,3 +221,21 @@ body{
 #player{
   margin-bottom: 20px;
 }
+.listtitle{
+  display: inline;
+  color: white;
+  font-size: 16px;
+  display: -webkit-box;
+  overflow:hidden;
+	text-overflow : ellipsis;
+	-webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+.scroll-list{
+  height: 500px;
+  overflow: scroll;
+  margin-top: 20px;
+}
+.video-list{
+  margin: 10px 0;
+}

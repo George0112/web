@@ -91,9 +91,14 @@ class VideoController extends Controller
 							"accent" => 'Null', 'time' => 'Null', 'test' => 0, 'level' => 'Null']
 					]);
 				}
-				//return redirect('/video?videoId='.$videoId);
+				$duplicate = DB::table('subtitle')->where('videoId', $videoId)->count();
+				if(!$duplicate){
+					$success = DB::table('subtitle')->insert([
+						['videoId' => $videoId, 'subtitles' => $captions]
+					]);
+				}
 			}
-			return 'success';
+			return redirect('/videoPage?id='.$videoId);
 		}
 		else if($videoId){
 			$crawler = new YoutubeCrawler($videoId);
@@ -113,14 +118,20 @@ class VideoController extends Controller
 						"accent" => 'Null', 'time' => 'Null', 'test' => 0, 'level' => 'Null']
 				]);
 			}
-			return redirect('/video?videoId='.$videoId);
+			$duplicate = DB::table('subtitle')->where('videoId', $videoId)->count();
+			if(!$duplicate){
+				$success = DB::table('subtitle')->insert([
+					['videoId' => $videoId, 'subtitles' => $captions]
+				]);
+			}
+			return redirect('/videoPage?id='.$videoId);
 		}else return view('insertVideo', ['wrong_url' => true]);
 	}
 
 	public function getUserVideoList(Request $request)
 	{
 		$user = Auth::user();
-		$list = DB::table('userVideoList')->where('userId', $user['id'])->get();
+		$list = DB::table('userVideoList')->join('video', 'video.videoId', '=', 'userVideoList.videoId')->select('video.videoId', 'video.title')->where('userId', $user['id'])->get();
 		$list = json_encode($list);
 		return $list;
 	}
@@ -135,6 +146,9 @@ class VideoController extends Controller
   }
     public function getVideoPage(Request $request)
   {
-    return view('videoPage');
+	$user = Auth::user();
+	$list = DB::table('userVideoList')->join('video', 'video.videoId', '=', 'userVideoList.videoId')->select('video.videoId', 'video.title')->where('userId', $user['id'])->get();
+	//$list = json_encode($list);
+    return view('videoPage', ['list' => $list]);
   }
 }

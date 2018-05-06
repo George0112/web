@@ -7,12 +7,17 @@ $.ajax({
   url: `http://140.114.79.72/video/subtitle?id=${videoId}`,
   type: "GET",
   success: function(data){
-      json = JSON.parse(data[0].subtitles);
-    //  console.log(JSON.parse(json).json);
-      if(JSON.parse(json).json == "") alert("此部影片沒有字幕");
-      
-      json = JSON.parse(JSON.parse(json).json);
-      console.log(json);
+      console.log(`http://140.114.79.72/video/subtitle?id=${videoId}`)
+     //console.log(data[0].subtitles);
+     if(data[0].subtitles=="null"){
+        alert("此部影片沒有字幕");
+     }
+     else{
+        json = JSON.parse(data[0].subtitles);
+        
+        console.log(json.text[0]["@attributes"]);
+     }
+   
   }
 });
 
@@ -48,17 +53,15 @@ $(window).click((event) => {
     if(!$(event.target).closest('.popup').length){
         $('.popuptext').remove();
         get_dict = false;
-    //    console.log(get_dict);
     }
 });
 
 function add_subtitude(){
-  //  json = JSON.parse(subtitle);
-    $.each(json, function(index, d){
+    $.each(json.text, function(index, d){
 
         var text = '';
         id=0;
-        d.text.split(' ').map((i)=>{
+        d["@attributes"].subtitle.split(' ').map((i)=>{
           //  console.log(i);
             text += `<span class='popup' id='text`+id+`' onclick='ask_google("`+i+'",'+index+','+id+`)')>` + i+ " </span>";
             id++;
@@ -180,15 +183,15 @@ function playAt(index) {
     $.post("https://translation.googleapis.com/language/translate/v2?",
     {
         key: "AIzaSyAGjI6nBCUK1QAjqWxSuLFdWcv38pKENJ8",
-        q: json[index].text,
+        q: json.text[index]["@attributes"].subtitle,
         target:"zh-TW"
     },
     function(data, status){
     if(engCaption && cnCaption){
-        $("#underSubtitles").html("<p id='underSubtitle'> " + json[index].text +"<br/>" + data.data.translations[0].translatedText+ "</p>");
+        $("#underSubtitles").html("<p id='underSubtitle'> " + json.text[index]["@attributes"].subtitle +"<br/>" + data.data.translations[0].translatedText+ "</p>");
     }
     else if(engCaption && !cnCaption){
-        $("#underSubtitles").html("<p id='underSubtitle'> " + json[index].text + "</p>");
+        $("#underSubtitles").html("<p id='underSubtitle'> " + json.text[index]["@attributes"].subtitle + "</p>");
     }
     else if(!engCaption && cnCaption){
         $("#underSubtitles").html("<p id='underSubtitle'> " + data.data.translations[0].translatedText + "</p>");
@@ -207,21 +210,21 @@ function playAt(index) {
     });
 	$('#subtitle'+index).css("background-color", "#bfbfbf");
 	currentSubtitle = index;
-	second = parseInt(json[index].start_time)/1000;
-	d = json[index].end_time - json[index].start_time;
-	duration = d-1;
+	second = parseInt(json.text[index]["@attributes"].start);
+	d = json.text[index]["@attributes"].dur*1000;
+    duration = d-1;
     player.seekTo(second, 1);
 	done = false;
     player.playVideo();
-  //  console.log("playAt()");
-  //  console.log(second + " " + d);
+   console.log("playAt()");
+   console.log(second + " " + d);
 }
 
 function searchForSubtitle(){
 	var currentTime = parseInt(player.getCurrentTime()*1000);
 	var minInterval = Number.MAX_VALUE;
 	var i = 0;
-	while (currentTime-json[i].start_time >= 0){
+	while (currentTime-json.text[i]["@attributes"].start*1000>= 0){
 		i++;
 	}
 	i--;
@@ -230,16 +233,16 @@ function searchForSubtitle(){
     $.post("https://translation.googleapis.com/language/translate/v2?",
     {
         key: "AIzaSyAGjI6nBCUK1QAjqWxSuLFdWcv38pKENJ8",
-        q: json[i].text,
+        q: json.text[i]["@attributes"].subtitle,
         target:"zh-TW"
     },
     function(data, status){
    
     if(engCaption && cnCaption){
-        $("#underSubtitles").html("<p id='underSubtitle'> " + json[i].text +"<br/>" + data.data.translations[0].translatedText+ "</p>");
+        $("#underSubtitles").html("<p id='underSubtitle'> " +json.text[i]["@attributes"].subtitle +"<br/>" + data.data.translations[0].translatedText+ "</p>");
     }
     else if(engCaption && !cnCaption){
-        $("#underSubtitles").html("<p id='underSubtitle'> " + json[i].text + "</p>");
+        $("#underSubtitles").html("<p id='underSubtitle'> " + json.text[i]["@attributes"].subtitle+ "</p>");
     }
     else if(!engCaption && cnCaption){
         $("#underSubtitles").html("<p id='underSubtitle'> " + data.data.translations[0].translatedText + "</p>");
@@ -254,7 +257,9 @@ function searchForSubtitle(){
         $(this).css("background-color", "white");
     });
     $('#subtitle'+i).css("background-color", "#bfbfbf");
+    
     currentSubtitle = i;
+    
     var top = $('#subtitle' + currentSubtitle).position().top-15;
     $('#subtitle').animate({
         scrollTop: '+=' + top
@@ -271,10 +276,11 @@ function renderSubtitle(){
     //$("#underSubtitles").text(json[0].transcripts[i].text);
 	if(player.getPlayerState()==1){
 		renderTimeOut = setTimeout(function(){
+            //console.log(currentSubtitle);
 			currentSubtitle++;
 			changeState = false;
 			changeSubtitle();
-		}, json[currentSubtitle+1].start_time-parseInt(player.getCurrentTime()*1000));
+		}, json.text[currentSubtitle+1]["@attributes"].start*1000-parseInt(player.getCurrentTime()*1000));
 	}
 }
 
@@ -283,15 +289,15 @@ function changeSubtitle(){
         $.post("https://translation.googleapis.com/language/translate/v2?",
         {
             key: "AIzaSyAGjI6nBCUK1QAjqWxSuLFdWcv38pKENJ8",
-            q: json[currentSubtitle].text,
+            q: json.text[currentSubtitle]["@attributes"].subtitle,
             target:"zh-TW"
         },
         function(data, status){
         if(engCaption && cnCaption){
-            $("#underSubtitles").html("<p id='underSubtitle'> " + json[currentSubtitle].text +"<br/>" + data.data.translations[0].translatedText+ "</p>");
+            $("#underSubtitles").html("<p id='underSubtitle'> " + json.text[currentSubtitle]["@attributes"].subtitle +"<br/>" + data.data.translations[0].translatedText+ "</p>");
         }
         else if(engCaption && !cnCaption){
-            $("#underSubtitles").html("<p id='underSubtitle'> " + json[currentSubtitle].text + "</p>");
+            $("#underSubtitles").html("<p id='underSubtitle'> " + json.text[currentSubtitle]["@attributes"].subtitle + "</p>");
         }
         else if(!engCaption && cnCaption){
             $("#underSubtitles").html("<p id='underSubtitle'> " + data.data.translations[0].translatedText + "</p>");
@@ -311,9 +317,10 @@ function changeSubtitle(){
         }, 500)
         //document.getElementById("subtitle" + currentSubtitle).scrollIntoView(true);
 		changeTimeOut = setTimeout(function(){
-			currentSubtitle++;
+            // console.log(currentSubtitle);
+            currentSubtitle++;
 			changeSubtitle();
-		}, json[currentSubtitle+1].start_time-parseInt(player.getCurrentTime()*1000));
+		},json.text[currentSubtitle+1]["@attributes"].start*1000-parseInt(player.getCurrentTime()*1000));
 	}
 }
 
