@@ -57,7 +57,7 @@
                     <li class="part"><a href='#partIII'>Listening & Speaking</a></li>
                     
                     <li class="part-icon"><a href='/insertVideo' class="member-item"><i class="fas fa-flag"></i></a></li>
-                    <li class="part-icon"><a href='/videoList' class="member-item"><i class="fas fa-envelope"></i></a></li>
+                    <li class="part-icon"><a href='/editVideo' class="member-item"><i class="fas fa-envelope"></i></a></li>
                     <!--li class="part-icon">  <i class="fas fa-check-square"></i></li-->
                     <li class="part-icon">
                       <a href="#" class="dropdown-toggle member-item" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user"></i></a>

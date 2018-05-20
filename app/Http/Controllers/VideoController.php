@@ -38,7 +38,7 @@ class VideoController extends Controller
      public function getVideoData(Request $request)
 	{
 		$id = $request['videoId'];
-		$videos = DB::table('video')->paginate(15);
+		$videos = DB::table('video')->orderBy('id', 'desc')->paginate(15);
 		$videos = json_encode($videos);
 		return $videos; 
 	}
@@ -150,5 +150,37 @@ class VideoController extends Controller
 	$list = DB::table('userVideoList')->join('video', 'video.videoId', '=', 'userVideoList.videoId')->select('video.videoId', 'video.title')->where('userId', $user['id'])->get();
 	//$list = json_encode($list);
     return view('videoPage', ['list' => $list]);
+  }
+  public function getEditVideo(Request $request)
+  {
+    return view('editVideo', ['wrong_url' => false]);
+  }
+  public function editVideo(Request $request)
+  {
+    $v = $request['v'];
+    
+    $query_str = parse_url($v, PHP_URL_QUERY);
+    parse_str($query_str, $query_params);
+    $videoId = array_key_exists("v", $query_params) ? $query_params['v'] : Null;
+    
+    return redirect('/editPage?id='.$videoId);
+  }
+  public function getEditPage(Request $request)
+  {
+    return view('editPage');
+  }
+  public function editFinish(Request $request)
+  {
+      $d = $request->data;
+      $videoId = $request->id;
+      $title = $request->title;
+    /*  DB::table('video')->insert([
+        ['videoId' => $videoId, "created_at" =>  \Carbon\Carbon::now('Asia/Taipei'),  "title" => $title, 
+          "accent" => 'Null', 'time' => 'Null', 'test' => 0, 'level' => 'Null']
+      ]);*/
+      DB::table('subtitle')
+        ->where('videoId',$videoId)
+        ->update(['subtitles' => $d]);
+    
   }
 }

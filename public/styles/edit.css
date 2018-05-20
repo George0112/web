@@ -1,0 +1,52 @@
+
+.container{
+  margin-top:120px;
+}
+.subtitle-list{
+  width:400px;
+  height:400px;
+  overflow:scroll;
+}
+.last-item{
+  visibility: hidden;
+  display:none;
+}
+.subtitle-item{
+  border-bottom: 1px solid black;
+  height: 80px;
+}
+.subtitle-text{
+  width: 250px;
+  height: 60px;
+}
+.subtitle-icon{
+  width: 30px;
+}
+.subtitle-time{
+  display: inline-block;
+  width: 50px;
+}
+.start-time{
+  border: 0;
+  width: 50px;
+}
+.end-time{
+  border: 0;
+    width: 50px;
+}
+.subtitle-icon{
+  float:right;
+}
+.editFinish{
+  float: right;
+  color: white;
+  background-color: black;
+  margin-bottom: 20px;
+}
+.inputfile{
+  display: inline-block !important;
+}
+.input-remind{
+  margin: 0 10px;
+  color: red;
+}

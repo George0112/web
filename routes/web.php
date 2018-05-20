@@ -16,6 +16,7 @@ Route::get('/', function () {
     //return view('welcome');
 	return redirect('/index');
 });
+Route::get('/welcome', function(){ return view('welcome'); });
 Route::post('/video/upload', ['uses' => 'VideoController@uploadVideo']);
 Route::get('/dev', function(){ return view('welcome');});
 Route::get('/home', 'HomeController@index')->name('home');
@@ -25,11 +26,15 @@ Route::get('/video/subtitle', ['uses' => 'VideoController@getVideoSubtitle']);
 Route::get('/try/variable', ['uses' => 'VideoController@tryVariable']);
 Route::get('/index', ['uses' => 'VideoController@getIndex']); 
 Route::get('/videoPage', ['uses' => 'VideoController@getVideoPage']); 
+Route::get('/editVideo', ['uses' => 'VideoController@getEditVideo']); 
+Route::get('/editPage', ['uses' => 'VideoController@getEditPage']);
 
 Auth::routes();
 Route::get('/insertVideo', ['middleware' => 'auth', 'uses' => 'VideoController@getInsertVideo']);
 Route::get('/videoList', ['middleware' => 'auth', 'uses' => 'VideoController@getUserVideoList']);
 Route::post('/insertVideo', ['uses' => 'VideoController@insertVideo']);
+Route::post('/editVideo', ['uses' => 'VideoController@editVideo']);
+Route::post('/editFinish', ['uses' => 'VideoController@editFinish']);
 Route::get('/insertList', function(){return view('chooseByList');});
 Route::get('/home', 'HomeController@index2')->name('index');
 Route::get('/index', 'HomeController@index2')->name('index');

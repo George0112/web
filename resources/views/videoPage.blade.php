@@ -10,7 +10,8 @@
 @section('content')
     <div class='container'>
       <div class='row'>
-        <h1 class="videoTitle">Listening</h1>
+        <h1 class="videoTitle">Listening<button class='editbtn'>Edit Your Video</button></h1>
+        
         <div id='playScreen' class='col col-md-6 col-lg-6'>
           <div id='player'></div>
           <div class='below' id='below'>

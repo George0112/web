@@ -55,7 +55,9 @@ $(window).click((event) => {
         get_dict = false;
     }
 });
-
+$(".editbtn").click(()=>{
+  window.location.href=`./editPage?id=${getUrlParameter('id')}`;
+});
 function add_subtitude(){
     $.each(json.text, function(index, d){
 

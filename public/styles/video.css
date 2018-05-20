@@ -239,3 +239,8 @@ body{
 .video-list{
   margin: 10px 0;
 }
+.editbtn{
+  float: right;
+  color: white;
+  background-color: black;
+}
